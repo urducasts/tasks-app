@@ -29,13 +29,33 @@
 
 	<div class="container mt-4">
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-7">
 				<h2 class="mb-3">All Tasks</h2>
 				<ul class="list-group">
 					@foreach($tasks as $task)
-						<li class="list-group-item">{{ $task->title }}</li>
+						<li class="list-group-item" title="{{ $task->body }}">{{ $task->title }}</li>
 					@endforeach
 				</ul>
+			</div>
+
+			<div class="col-md-5">
+				<h2>Add New Task</h2>
+				<form method="POST" action="/tasks/create">
+					{{ csrf_field() }}
+					<div class="form-group {{ $errors->has('title') ? 'has-danger' : '' }}">
+						<label for="title">Title:</label>
+						<input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+						{!! $errors->first('title', '<div class="form-control-feedback">:message</div>') !!}
+					</div>
+
+					<div class="form-group {{ $errors->has('body') ? 'has-danger' : '' }}">
+						<label for="body">Body:</label>
+						<input type="text" class="form-control" id="body" name="body">
+						{!! $errors->first('body', '<div class="form-control-feedback">:message</div>') !!}
+					</div>
+
+					<button type="submit" class="btn btn-primary">Create Task</button>
+				</form>
 			</div>
 		</div>
 	</div>

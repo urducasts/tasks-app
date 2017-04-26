@@ -12,3 +12,5 @@
 */
 
 Route::get('/', 'TasksController@index');
+
+Route::post('/tasks/create', 'TasksController@store');
