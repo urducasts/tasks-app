@@ -17,24 +17,14 @@ class TasksController extends Controller
     {
         if (request('by')) {
             $user = User::where('name', request('by'))->first();
-            $tasks = Task::where('user_id', $user->id)->with('user')->paginate(2);
+            $tasks = Task::where('user_id', $user->id)->latest()->with('user')->paginate(5);
         }
         else {
-            $tasks = Task::with('user')->paginate(2);
+            $tasks = Task::with('user')->latest()->paginate(5);
         }
 
         $users = User::all();
         return view('index', compact('tasks', 'users'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -57,28 +47,6 @@ class TasksController extends Controller
         ]);
 
         return back();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Task $task)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
     }
 
     /**
