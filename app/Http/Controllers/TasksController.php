@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Task;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,10 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
-        return view('index', compact('tasks'));
+        $tasks = Task::with('user')->paginate(2);
+
+        $users = User::all();
+        return view('index', compact('tasks', 'users'));
     }
 
     /**
@@ -37,12 +40,14 @@ class TasksController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required|min:3|alpha_num'
+            'title' => 'required|min:3',
+            'user_id' => 'required'
         ]);
 
         Task::create([
             'title' => $request->title,
             'body' => $request->body,
+            'user_id' => $request->user_id
         ]);
 
         return back();

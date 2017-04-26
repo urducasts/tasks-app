@@ -33,9 +33,16 @@
 				<h2 class="mb-3">All Tasks</h2>
 				<ul class="list-group">
 					@foreach($tasks as $task)
-						<li class="list-group-item" title="{{ $task->body }}">{{ $task->title }}</li>
+						<li class="list-group-item" title="{{ $task->body }}">
+							<img src="http://gravatar.com/avatar/{{ md5($task->user->email) }}?s=40" class="rounded">
+							<span class="ml-2">{{ $task->title }}</span>
+						</li>
 					@endforeach
 				</ul>
+
+				<div class="mt-3">
+					{{ $tasks->links() }}
+				</div>
 			</div>
 
 			<div class="col-md-5">
@@ -52,6 +59,16 @@
 						<label for="body">Body:</label>
 						<input type="text" class="form-control" id="body" name="body">
 						{!! $errors->first('body', '<div class="form-control-feedback">:message</div>') !!}
+					</div>
+
+					<div class="form-group {{ $errors->has('user_id') ? 'has-danger' : '' }}">
+						<label for="user_id">Assing To:</label>
+						<select class="form-control" id="user_id" name="user_id">
+							@foreach($users as $user)
+								<option value="{{ $user->id }}">{{ $user->name }}</option>
+							@endforeach
+						</select>
+						{!! $errors->first('user_id', '<div class="form-control-feedback">:message</div>') !!}
 					</div>
 
 					<button type="submit" class="btn btn-primary">Create Task</button>
