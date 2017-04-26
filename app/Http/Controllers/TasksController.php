@@ -15,7 +15,13 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = Task::with('user')->paginate(2);
+        if (request('by')) {
+            $user = User::where('name', request('by'))->first();
+            $tasks = Task::where('user_id', $user->id)->with('user')->paginate(2);
+        }
+        else {
+            $tasks = Task::with('user')->paginate(2);
+        }
 
         $users = User::all();
         return view('index', compact('tasks', 'users'));
@@ -84,7 +90,11 @@ class TasksController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $task->update([
+            'completed' => true
+        ]);
+        
+        return back();
     }
 
     /**
@@ -95,6 +105,8 @@ class TasksController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+
+        return back();
     }
 }
